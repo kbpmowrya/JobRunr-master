@@ -1,0 +1,27 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.9'
+
+#Define services
+services:
+
+  #Back-end Spring Boot Application
+  jobrunr:
+    #The docker file in scrum-app build the jar and provides the docker image with the following name.
+    build: ./JobRunr-master
+    container_name: jobrunr
+    environment:
+      - pdf-genertor-url=http://192.168.80.2:9090
+    ports:
+      - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - 8000:8000
+    volumes:
+      - .m2:/root/.m2
+    networks:
+      - default    # network outside
+      - internal   # network internal
+networks:
+  default:
+    external: true
+    name: springapimysql-net
+  internal:
+    internal: true
